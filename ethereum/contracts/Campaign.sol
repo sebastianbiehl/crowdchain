@@ -41,7 +41,7 @@ contract Campaign {
     }
     
     function contribute() public payable {
-        require(msg.value > minContribution);
+        require(msg.value >= minContribution);
         
         approvers[msg.sender] = true;
         approversCount++;
@@ -77,5 +77,19 @@ contract Campaign {
         
         request.recipient.transfer(request.value);
         request.complete = true;
+    }
+
+    function getSummary() public view returns (uint, uint, uint, uint, address) {
+        return (
+            minContribution,
+            this.balance,
+            requests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    function getRequestsCount() public view returns (uint) {
+        return requests.length;
     }
 }
